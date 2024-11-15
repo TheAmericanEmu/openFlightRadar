@@ -105,3 +105,4 @@ if __name__=="__main__":
         all_flights_list.append(str()+"\n")
     with open("output.txt",encoding="UTF-8",mode="w") as file:
         file.writelines(all_flights_list)
+

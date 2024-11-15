@@ -1,6 +1,7 @@
+from unixTime import UnixTime
 class Waypoint():
     def __init__(self,*args) -> None:
-        self.time:int=args[0]
+        self.time:int=UnixTime(int(args[0]))
         self.latitude:float=args[1]
         self.longitude:float=args[2]
         self.baro_altitude:float=args[3]

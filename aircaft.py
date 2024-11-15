@@ -6,7 +6,7 @@ class Aircaft():
     def __init__(self,*args):
         #print(args)
         self.icao24 = args[0]
-        self.callsign = args[1].strip()
+        self.callsign = args[1]
         self.origin_country = args[2]
         self.time_position = args[3]
         self.last_contact = args[4]
@@ -81,14 +81,14 @@ class Aircaft():
 
     def get_path(self)->list:
         path=requests.get(f"https://opensky-network.org/api/tracks/all?icao24={self.icao24}&time=0",auth=("TheAmericanEmu","Colin@2008"))
-        try:
+        if(path.status_code==200):
             path=json.loads(path.text)
             output_list=[]
             for waypoint_list in path["path"]:
                 output_list.append(waypoint.Waypoint(*waypoint_list))
             return output_list
-        except json.decoder.JSONDecodeError:
-            return ["<ERROR GETTING PATH>"]
+        else:
+            return ["<ERROR GETTING PATH:404>"]
 
     
     def __str__(self):
@@ -100,7 +100,7 @@ if __name__=="__main__":
     all_flights= json.loads(all_flights)
     all_flights_list=[]
     for i in range(len(all_flights["states"])):
-        aircaft_obj=Aircaft(*all_flights["states"])
+        aircaft_obj=Aircaft(*all_flights["states"][i])
         print(str(aircaft_obj.path[0]))
         all_flights_list.append(str()+"\n")
     with open("output.txt",encoding="UTF-8",mode="w") as file:
